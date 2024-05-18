@@ -36,7 +36,7 @@ public class MapManager : MonoBehaviour
     public Dictionary<Vector2Int, Node> Nodes = new Dictionary<Vector2Int, Node>();
     public List<Vector3Int> VisibleTiles;
     public Dictionary<Vector3Int, TileData> Tiles;
-    
+
 
     [Header("Map Settings")]
     public int width = 80;
@@ -44,6 +44,7 @@ public class MapManager : MonoBehaviour
     public int roomMaxSize = 10;
     public int roomMinSize = 6;
     public int maxRooms = 30;
+    public int maxEnemies = 2;
 
     private void Start()
     {
@@ -59,6 +60,7 @@ public class MapManager : MonoBehaviour
         generator.SetSize(width, height);
         generator.SetRoomSize(roomMinSize, roomMaxSize);
         generator.SetMaxRooms(maxRooms);
+        generator.SetMaxEnemies(maxEnemies);
         generator.Generate();
 
         AddTileMapToDictionary(FloorMap);
