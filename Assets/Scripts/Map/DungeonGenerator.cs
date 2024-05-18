@@ -26,6 +26,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         maxRooms = max;
     }
+
     public void SetMaxEnemies(int max)
     {
         maxEnemies = max;
@@ -51,7 +52,7 @@ public class DungeonGenerator : MonoBehaviour
                 continue;
             }
 
-            // add tiles make the room visible on the tilemap
+            // add tiles to make the room visible on the tilemap
             for (int x = roomX; x < roomX + roomWidth; x++)
             {
                 for (int y = roomY; y < roomY + roomHeight; y++)
@@ -70,11 +71,10 @@ public class DungeonGenerator : MonoBehaviour
                     {
                         SetFloorTile(new Vector3Int(x, y, 0));
                     }
-
                 }
             }
 
-            // create a coridor between rooms
+            // create a corridor between rooms
             if (rooms.Count != 0)
             {
                 TunnelBetween(rooms[rooms.Count - 1], room);
@@ -82,7 +82,13 @@ public class DungeonGenerator : MonoBehaviour
             PlaceEnemies(room, maxEnemies);
             rooms.Add(room);
         }
-        var player = MapManager.Get.CreateActor("Player", rooms[0].Center());
+
+        // Create the player and set it in the GameManager
+        GameObject playerObject = MapManager.Get.CreateActor("Player", rooms[0].Center());
+        if (playerObject != null)
+        {
+            GameManager.Get.Player = playerObject.GetComponent<Actor>();
+        }
     }
 
     private bool TrySetWallTile(Vector3Int pos)
@@ -150,47 +156,27 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
     }
+
     private void PlaceEnemies(Room room, int maxEnemies)
-
     {
-
-        // the number of enemies we want 
-
+        // the number of enemies we want
         int num = Random.Range(0, maxEnemies + 1);
 
-
-
         for (int counter = 0; counter < num; counter++)
-
         {
-
-            // The borders of the room are walls, so add and substract by 1 
-
+            // The borders of the room are walls, so add and subtract by 1
             int x = Random.Range(room.X + 1, room.X + room.Width - 1);
-
             int y = Random.Range(room.Y + 1, room.Y + room.Height - 1);
 
-
-
-            // create different enemies 
-
+            // create different enemies
             if (Random.value < 0.5f)
-
             {
-
                 GameManager.Get.CreateActor("lady", new Vector2(x, y));
-
             }
-
             else
-
             {
-
                 GameManager.Get.CreateActor("bredegast", new Vector2(x, y));
-
             }
-
         }
-
     }
 }
