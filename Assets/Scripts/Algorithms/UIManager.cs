@@ -1,39 +1,48 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance { get; private set; }
+    private static UIManager instance;
 
-    [Header("Documents")]
-    public GameObject healthBarObject;
-    public GameObject messagesObject;
-
-    private HealthBar healthBar;
-    private Messages messages;
-
-    private void Awake()
+    public static UIManager Instance
     {
-        if (Instance == null)
+        get
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            if (instance == null)
+            {
+                instance = FindObjectOfType<UIManager>();
+                if (instance == null)
+                {
+                    Debug.LogError("UIManager is missing in the scene!");
+                }
+            }
+            return instance;
         }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-        healthBar = healthBarObject.GetComponent<HealthBar>();
-        messages = messagesObject.GetComponent<Messages>();
     }
 
-    public void UpdateHealth(int current, int max)
+    // Reference naar de UI-elementen
+    public Text healthText;
+    public Text messageText;
+
+    public void UpdateHealth(int currentHealth, int maxHealth)
     {
-        healthBar.SetValues(current, max);
+        // Update de health tekst
+        if (healthText != null)
+        {
+            healthText.text = "Health: " + currentHealth + " / " + maxHealth;
+        }
     }
 
-    public void AddMessage(string message, Color color)
+    public void ShowMessage(string message, Color color)
     {
-        messages.AddMessage(message, color);
+        // Toon een bericht
+        if (messageText != null)
+        {
+            messageText.text = message;
+            messageText.color = color;
+        }
     }
 }

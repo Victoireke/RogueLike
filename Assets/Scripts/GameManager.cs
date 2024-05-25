@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour
     public Actor Player { get; set; } // Ensure this property is available
     public List<Actor> Enemies { get; private set; } = new List<Actor>();
 
+    // Reference to UIManager
+    private UIManager uiManager;
+
     private void Awake()
     {
         if (instance == null)
@@ -18,6 +21,13 @@ public class GameManager : MonoBehaviour
         else if (instance != this)
         {
             Destroy(gameObject);
+        }
+
+        // Initialize UIManager reference
+        uiManager = FindObjectOfType<UIManager>();
+        if (uiManager == null)
+        {
+            Debug.LogError("UIManager not found in the scene!");
         }
     }
 
@@ -68,10 +78,16 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     public void RemoveEnemy(Actor enemy)
     {
         Enemies.Remove(enemy);
-        Destroy(enemy.gameObject); // Optioneel, afhankelijk van je implementatie
+        Destroy(enemy.gameObject); // Optionally, depending on your implementation
     }
 
+    // Getter for UIManager
+    public UIManager GetUIManager()
+    {
+        return uiManager;
+    }
 }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4554226612303520049}
   - component: {fileID: 7398362681752249050}
   - component: {fileID: 913289115791375825}
+  - component: {fileID: 3558303788195315260}
   m_Layer: 0
   m_Name: bredegast
   m_TagString: Untagged
@@ -98,8 +99,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd46e2c4391b8c64b9f375f0f2c9890b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FieldOfView: []
-  FieldOfViewRange: 8
+  maxHitPoints: 8
+  hitPoints: 8
+  defense: 0
+  power: 3
 --- !u!114 &913289115791375825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,5 +113,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c3a320676491aeb4b93e0a6a8c0dafb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3558303788195315260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4188049621341690255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af028bd8c61434a4f8119d19adbf4b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

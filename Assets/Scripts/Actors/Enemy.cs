@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     public Actor Target { get; private set; }
     public bool IsFighting { get; private set; } = false;
     private AStar algorithm;
+      
 
     private void Start()
     {
@@ -31,7 +32,7 @@ public class Enemy : MonoBehaviour
 
         Vector3Int targetGridPosition = MapManager.Get.FloorMap.WorldToCell(Target.transform.position);
 
-        // First check if already fighting, because the FieldOfView check costs more cpu
+        // First check if already fighting, because the FieldOfView check costs more CPU
         if (IsFighting || GetComponent<Actor>().FieldOfView.Contains(targetGridPosition))
         {
             if (!IsFighting)
@@ -39,7 +40,18 @@ public class Enemy : MonoBehaviour
                 IsFighting = true;
             }
 
-            MoveAlongPath(targetGridPosition);
+            // Bereken de afstand tussen de enemy en het target
+            float distance = Vector3.Distance(transform.position, Target.transform.position);
+            if (distance < 1.5f)
+            {
+                // Als de afstand kleiner is dan 1.5, voer dan de Hit-functie uit
+                Action.Hit(GetComponent<Actor>(), Target);
+            }
+            else
+            {
+                // In het andere geval, voer de MoveAlongPath-functie uit
+                MoveAlongPath(targetGridPosition);
+            }
         }
     }
 }

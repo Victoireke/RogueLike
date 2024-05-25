@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Actor : MonoBehaviour
 {
+    public List<Vector3Int> FieldOfView { get; set; } = new List<Vector3Int>();
     // Powers
     [SerializeField] private int maxHitPoints;
     [SerializeField] private int hitPoints;
@@ -20,23 +21,33 @@ public class Actor : MonoBehaviour
     {
         if (GetComponent<Player>() != null)
         {
-            GameManager.Get.UIManager.UpdateHealth(hitPoints, maxHitPoints);
+            UIManager.Instance.UpdateHealth(hitPoints, maxHitPoints);
         }
     }
 
-    public void DoDamage(int hp)
+    public void Move(Vector3 direction)
     {
-        hitPoints -= hp;
+        // Verplaats de actor in de opgegeven richting
+        transform.position += direction;
+    }
+
+    public void UpdateFieldOfView()
+    {
+        // Implementeer de logica voor het bijwerken van het gezichtsveld hier
+    }
+
+    public void DoDamage(int damage)
+    {
+        // Verminder de hitpoints met de ontvangen schade
+        hitPoints -= damage;
+        // Zorg ervoor dat hitpoints niet onder nul gaat
         if (hitPoints < 0)
         {
             hitPoints = 0;
         }
-
-        if (GetComponent<Player>() != null)
-        {
-            GameManager.Get.UIManager.UpdateHealth(hitPoints, maxHitPoints);
-        }
-
+        // Update de health UI
+        UIManager.Instance.UpdateHealth(hitPoints, maxHitPoints);
+        // Als de hitpoints nul zijn, roep Die() aan
         if (hitPoints == 0)
         {
             Die();
@@ -45,20 +56,8 @@ public class Actor : MonoBehaviour
 
     private void Die()
     {
-        if (GetComponent<Player>() != null)
-        {
-            GameManager.Get.UIManager.ShowMessage("You died!", Color.red);
-        }
-        else
-        {
-            string actorName = gameObject.name;
-            GameManager.Get.UIManager.ShowMessage(actorName + " is dead!", Color.green);
-            GameManager.Get.CreateActor("Remains of " + actorName, transform.position);
-            GameManager.Get.RemoveEnemy(this);
-        }
-
-        Destroy(gameObject);
+        // Implementeer logica voor wanneer de actor sterft
     }
 
-    // Other methods...
+    // Andere methoden...
 }
