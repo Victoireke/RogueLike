@@ -68,4 +68,10 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    public void RemoveEnemy(Actor enemy)
+    {
+        Enemies.Remove(enemy);
+        Destroy(enemy.gameObject); // Optioneel, afhankelijk van je implementatie
+    }
+
 }

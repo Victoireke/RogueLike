@@ -4,34 +4,61 @@ using UnityEngine;
 
 public class Actor : MonoBehaviour
 {
-    private AdamMilVisibility algorithm;
-    public List<Vector3Int> FieldOfView = new List<Vector3Int>();
-    public int FieldOfViewRange = 8;
+    // Powers
+    [SerializeField] private int maxHitPoints;
+    [SerializeField] private int hitPoints;
+    [SerializeField] private int defense;
+    [SerializeField] private int power;
+
+    // Properties
+    public int MaxHitPoints { get { return maxHitPoints; } }
+    public int HitPoints { get { return hitPoints; } }
+    public int Defense { get { return defense; } }
+    public int Power { get { return power; } }
 
     private void Start()
     {
-        algorithm = new AdamMilVisibility();
-        UpdateFieldOfView();
-    }
-
-    public void Move(Vector3 direction)
-    {
-        if (MapManager.Get.IsWalkable(transform.position + direction))
+        if (GetComponent<Player>() != null)
         {
-            transform.position += direction;
+            GameManager.Get.UIManager.UpdateHealth(hitPoints, maxHitPoints);
         }
     }
 
-    public void UpdateFieldOfView()
+    public void DoDamage(int hp)
     {
-        var pos = MapManager.Get.FloorMap.WorldToCell(transform.position);
-
-        FieldOfView.Clear();
-        algorithm.Compute(pos, FieldOfViewRange, FieldOfView);
-
-        if (GetComponent<Player>())
+        hitPoints -= hp;
+        if (hitPoints < 0)
         {
-            MapManager.Get.UpdateFogMap(FieldOfView);
+            hitPoints = 0;
+        }
+
+        if (GetComponent<Player>() != null)
+        {
+            GameManager.Get.UIManager.UpdateHealth(hitPoints, maxHitPoints);
+        }
+
+        if (hitPoints == 0)
+        {
+            Die();
         }
     }
+
+    private void Die()
+    {
+        if (GetComponent<Player>() != null)
+        {
+            GameManager.Get.UIManager.ShowMessage("You died!", Color.red);
+        }
+        else
+        {
+            string actorName = gameObject.name;
+            GameManager.Get.UIManager.ShowMessage(actorName + " is dead!", Color.green);
+            GameManager.Get.CreateActor("Remains of " + actorName, transform.position);
+            GameManager.Get.RemoveEnemy(this);
+        }
+
+        Destroy(gameObject);
+    }
+
+    // Other methods...
 }

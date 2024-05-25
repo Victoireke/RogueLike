@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
+
 
 public class DungeonGenerator : MonoBehaviour
 {
-    public int maxEnemies;
     private int width, height;
     private int maxRoomSize, minRoomSize;
     private int maxRooms;
+    private int maxEnemies;
     List<Room> rooms = new List<Room>();
 
     public void SetSize(int width, int height)
@@ -44,11 +46,17 @@ public class DungeonGenerator : MonoBehaviour
             int roomX = Random.Range(0, width - roomWidth - 1);
             int roomY = Random.Range(0, height - roomHeight - 1);
 
-            var room = new Room(roomX, roomY, roomWidth, roomHeight);
+            GameObject roomObject = new GameObject("Room");
+            Room room = roomObject.AddComponent<Room>();
+            room.X = roomX;
+            room.Y = roomY;
+            room.Width = roomWidth;
+            room.Height = roomHeight;
 
             // if the room overlaps with another room, discard it
             if (room.Overlaps(rooms))
             {
+                Destroy(roomObject);
                 continue;
             }
 
@@ -57,10 +65,7 @@ public class DungeonGenerator : MonoBehaviour
             {
                 for (int y = roomY; y < roomY + roomHeight; y++)
                 {
-                    if (x == roomX
-                        || x == roomX + roomWidth - 1
-                        || y == roomY
-                        || y == roomY + roomHeight - 1)
+                    if (x == roomX || x == roomX + roomWidth - 1 || y == roomY || y == roomY + roomHeight - 1)
                     {
                         if (!TrySetWallTile(new Vector3Int(x, y)))
                         {
@@ -79,7 +84,9 @@ public class DungeonGenerator : MonoBehaviour
             {
                 TunnelBetween(rooms[rooms.Count - 1], room);
             }
+
             PlaceEnemies(room, maxEnemies);
+
             rooms.Add(room);
         }
 
@@ -171,11 +178,11 @@ public class DungeonGenerator : MonoBehaviour
             // create different enemies
             if (Random.value < 0.5f)
             {
-                GameManager.Get.CreateActor("lady", new Vector2(x, y));
+                GameManager.Get.CreateActor("Enemy", new Vector2(x, y));
             }
             else
             {
-                GameManager.Get.CreateActor("bredegast", new Vector2(x, y));
+                GameManager.Get.CreateActor("Enemy1", new Vector2(x, y));
             }
         }
     }
