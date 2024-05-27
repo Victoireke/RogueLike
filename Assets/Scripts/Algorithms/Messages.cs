@@ -9,11 +9,27 @@ public class Messages : MonoBehaviour
     private void Start()
     {
         var uiDocument = GetComponent<UIDocument>();
+        if (uiDocument == null)
+        {
+            Debug.LogError("UIDocument component not found.");
+            return;
+        }
+
         root = uiDocument.rootVisualElement;
+        if (root == null)
+        {
+            Debug.LogError("Root VisualElement not found.");
+            return;
+        }
 
         for (int i = 0; i < labels.Length; i++)
         {
             labels[i] = root.Q<Label>($"Label{i + 1}");
+            if (labels[i] == null)
+            {
+                Debug.LogError($"Label{i + 1} not found.");
+                return;
+            }
         }
 
         Clear();
@@ -24,8 +40,11 @@ public class Messages : MonoBehaviour
     {
         foreach (var label in labels)
         {
-            label.text = string.Empty;
-            label.style.color = Color.black;
+            if (label != null)
+            {
+                label.text = string.Empty;
+                label.style.color = Color.black;
+            }
         }
     }
 
@@ -33,17 +52,27 @@ public class Messages : MonoBehaviour
     {
         for (int i = labels.Length - 1; i > 0; i--)
         {
-            labels[i].text = labels[i - 1].text;
-            labels[i].style.color = labels[i - 1].style.color;
+            if (labels[i] != null && labels[i - 1] != null)
+            {
+                labels[i].text = labels[i - 1].text;
+                labels[i].style.color = labels[i - 1].style.color;
+            }
         }
-        labels[0].text = string.Empty;
-        labels[0].style.color = Color.black;
+
+        if (labels[0] != null)
+        {
+            labels[0].text = string.Empty;
+            labels[0].style.color = Color.black;
+        }
     }
 
     public void AddMessage(string content, Color color)
     {
         MoveUp();
-        labels[0].text = content;
-        labels[0].style.color = color;
+        if (labels[0] != null)
+        {
+            labels[0].text = content;
+            labels[0].style.color = color;
+        }
     }
 }

@@ -8,25 +8,58 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
 
     private void Awake()
     {
-        controls = new Controls();
+        InitializeControls();
     }
 
     private void Start()
     {
-        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -5);
-        GameManager.Get.Player = GetComponent<Actor>();
+        if (Camera.main != null)
+        {
+            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -5);
+        }
+        else
+        {
+            Debug.LogError("Main Camera not found.");
+        }
+
+        var actor = GetComponent<Actor>();
+        if (actor != null)
+        {
+            GameManager.Get.Player = actor;
+        }
+        else
+        {
+            Debug.LogError("Actor component not found on Player.");
+        }
     }
 
     private void OnEnable()
     {
+        if (controls == null)
+        {
+            InitializeControls();
+        }
+
         controls.Player.SetCallbacks(this);
         controls.Enable();
     }
 
     private void OnDisable()
     {
-        controls.Player.SetCallbacks(null);
-        controls.Disable();
+        if (controls != null)
+        {
+            controls.Player.SetCallbacks(null);
+            controls.Disable();
+        }
+    }
+
+    private void InitializeControls()
+    {
+        controls = new Controls();  
+        if (controls == null)
+        {
+            Debug.LogError("Failed to initialize controls.");
+        }
     }
 
     public void OnMovement(InputAction.CallbackContext context)
@@ -44,9 +77,27 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
 
     private void MoveOrHit()
     {
-        Vector2 direction = controls.Player.Movement.ReadValue<Vector2>();
-        Vector2 roundedDirection = new Vector2(Mathf.Round(direction.x), Mathf.Round(direction.y));
-        Action.MoveOrHit(GetComponent<Actor>(), roundedDirection);
-        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -5);
+        if (controls != null)
+        {
+            Vector2 direction = controls.Player.Movement.ReadValue<Vector2>();
+            Vector2 roundedDirection = new Vector2(Mathf.Round(direction.x), Mathf.Round(direction.y));
+            var actor = GetComponent<Actor>();
+            if (actor != null)
+            {
+                Action.MoveOrHit(actor, roundedDirection);
+                if (Camera.main != null)
+                {
+                    Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -5);
+                }
+            }
+            else
+            {
+                Debug.LogError("Actor component not found on Player.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Controls are not initialized.");
+        }
     }
 }
