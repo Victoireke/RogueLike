@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
-
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -10,6 +7,7 @@ public class DungeonGenerator : MonoBehaviour
     private int maxRoomSize, minRoomSize;
     private int maxRooms;
     private int maxEnemies;
+    private int maxItems; // Voeg deze regel toe
     List<Room> rooms = new List<Room>();
 
     public void SetSize(int width, int height)
@@ -32,6 +30,11 @@ public class DungeonGenerator : MonoBehaviour
     public void SetMaxEnemies(int max)
     {
         maxEnemies = max;
+    }
+
+    public void SetMaxItems(int max) // Voeg deze functie toe
+    {
+        maxItems = max;
     }
 
     public void Generate()
@@ -86,6 +89,7 @@ public class DungeonGenerator : MonoBehaviour
             }
 
             PlaceEnemies(room, maxEnemies);
+            PlaceItems(room, maxItems); // Voeg deze regel toe
 
             rooms.Add(room);
         }
@@ -183,6 +187,32 @@ public class DungeonGenerator : MonoBehaviour
             else
             {
                 GameManager.Get.CreateActor("Enemy1", new Vector2(x, y));
+            }
+        }
+    }
+
+    private void PlaceItems(Room room, int maxItems) // Voeg deze functie toe
+    {
+        int numItems = Random.Range(0, maxItems + 1);
+
+        for (int i = 0; i < numItems; i++)
+        {
+            int x = Random.Range(room.X + 1, room.X + room.Width - 1);
+            int y = Random.Range(room.Y + 1, room.Y + room.Height - 1);
+
+            // Create different items
+            float randomValue = Random.value;
+            if (randomValue < 0.33f)
+            {
+                GameManager.Get.CreateActor("HealthPotion", new Vector2(x, y));
+            }
+            else if (randomValue < 0.66f)
+            {
+                GameManager.Get.CreateActor("Fireball", new Vector2(x, y));
+            }
+            else
+            {
+                GameManager.Get.CreateActor("ScrollOfConfusion", new Vector2(x, y));
             }
         }
     }

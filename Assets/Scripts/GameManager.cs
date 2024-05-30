@@ -1,15 +1,16 @@
-using System.Collections;
+using Items;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
-    public Actor Player { get; set; } // Ensure this property is available
+    public Actor Player { get; set; }
     public List<Actor> Enemies { get; private set; } = new List<Actor>();
-
-    // Reference to UIManager
     private UIManager uiManager;
+
+    // Lijst voor Consumable items
+    private List<Consumable> items = new List<Consumable>();
 
     private void Awake()
     {
@@ -31,12 +32,38 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Voeg een Consumable item toe aan de lijst
+    public void AddItem(Consumable item)
+    {
+        items.Add(item);
+    }
+
+    // Verwijder een Consumable item uit de lijst
+    public void RemoveItem(Consumable item)
+    {
+        items.Remove(item);
+    }
+
+    // Haal een Consumable item op basis van locatie
+    public Consumable GetItemAtLocation(Vector3 location)
+    {
+        foreach (var item in items)
+        {
+            if (item.transform.position == location)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public static GameManager Get { get => instance; }
+
+    // Bestaande functies...
     public void AddEnemy(Actor enemy)
     {
         Enemies.Add(enemy);
     }
-
-    public static GameManager Get { get => instance; }
 
     public Actor GetActorAtLocation(Vector3 location)
     {
@@ -85,7 +112,6 @@ public class GameManager : MonoBehaviour
         Destroy(enemy.gameObject); // Optionally, depending on your implementation
     }
 
-    // Getter for UIManager
     public UIManager GetUIManager()
     {
         return uiManager;

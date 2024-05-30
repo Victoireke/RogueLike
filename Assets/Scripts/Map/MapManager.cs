@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class MapManager : MonoBehaviour
 {
@@ -37,7 +35,6 @@ public class MapManager : MonoBehaviour
     public List<Vector3Int> VisibleTiles;
     public Dictionary<Vector3Int, TileData> Tiles;
 
-
     [Header("Map Settings")]
     public int width = 80;
     public int height = 45;
@@ -45,6 +42,7 @@ public class MapManager : MonoBehaviour
     public int roomMinSize = 6;
     public int maxRooms = 30;
     public int maxEnemies = 2;
+    public int maxItems = 2; // Voeg deze regel toe
 
     private void Start()
     {
@@ -61,6 +59,7 @@ public class MapManager : MonoBehaviour
         generator.SetRoomSize(roomMinSize, roomMaxSize);
         generator.SetMaxRooms(maxRooms);
         generator.SetMaxEnemies(maxEnemies);
+        generator.SetMaxItems(maxItems); // Voeg deze regel toe
         generator.Generate();
 
         AddTileMapToDictionary(FloorMap);
