@@ -116,4 +116,17 @@ public class GameManager : MonoBehaviour
     {
         return uiManager;
     }
+
+    public List<Actor> GetNearbyEnemies(Vector3 location)
+    {
+        List<Actor> nearbyEnemies = new List<Actor>();
+        foreach (Actor enemy in Enemies)
+        {
+            if (Vector3.Distance(location, enemy.transform.position) < 5)
+            {
+                nearbyEnemies.Add(enemy);
+            }
+        }
+        return nearbyEnemies;
+    }
 }

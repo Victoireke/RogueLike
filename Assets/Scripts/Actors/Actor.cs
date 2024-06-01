@@ -59,5 +59,18 @@ public class Actor : MonoBehaviour
         // Implementeer logica voor wanneer de actor sterft
     }
 
-    // Andere methoden...
+    public void Heal(int hp)
+    {
+        int oldHitPoints = hitPoints;
+        hitPoints += hp;
+        if (hitPoints > maxHitPoints)
+        {
+            hitPoints = maxHitPoints;
+        }
+        if (GetComponent<Player>() != null)
+        {
+            UIManager.Instance.UpdateHealth(hitPoints, maxHitPoints);
+            UIManager.Instance.ShowMessage($"You have been healed for {hitPoints - oldHitPoints} HP.", Color.green);
+        }
+    }
 }
