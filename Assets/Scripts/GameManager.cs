@@ -1,6 +1,8 @@
 using Items;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using static Items.Consumable;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class GameManager : MonoBehaviour
     public Actor Player { get; set; }
     public List<Actor> Enemies { get; private set; } = new List<Actor>();
     private UIManager uiManager;
+    public List<Ladder> Ladders { get; private set; } = new List<Ladder>(); // List of ladders
 
     // Lijst voor Consumable items
     private List<Consumable> items = new List<Consumable>();
@@ -128,5 +131,24 @@ public class GameManager : MonoBehaviour
             }
         }
         return nearbyEnemies;
+    }
+
+    // Add a ladder to the GameManager
+    public void AddLadder(Ladder ladder)
+    {
+        Ladders.Add(ladder);
+    }
+
+    // Get a ladder at a specific location
+    public Ladder GetLadderAtLocation(Vector3 location)
+    {
+        foreach (var ladder in Ladders)
+        {
+            if (ladder.transform.position == location)
+            {
+                return ladder;
+            }
+        }
+        return null;
     }
 }

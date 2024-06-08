@@ -42,7 +42,8 @@ public class MapManager : MonoBehaviour
     public int roomMinSize = 6;
     public int maxRooms = 30;
     public int maxEnemies = 2;
-    public int maxItems = 2; // Voeg deze regel toe
+    public int maxItems = 2;
+    public int floor = 0; // New variable
 
     private void Start()
     {
@@ -59,7 +60,8 @@ public class MapManager : MonoBehaviour
         generator.SetRoomSize(roomMinSize, roomMaxSize);
         generator.SetMaxRooms(maxRooms);
         generator.SetMaxEnemies(maxEnemies);
-        generator.SetMaxItems(maxItems); // Voeg deze regel toe
+        generator.SetMaxItems(maxItems);
+        generator.SetCurrentFloor(floor); // Set current floor value
         generator.Generate();
 
         AddTileMapToDictionary(FloorMap);
@@ -146,5 +148,17 @@ public class MapManager : MonoBehaviour
             FogMap.SetColor(pos, Color.clear);
             VisibleTiles.Add(pos);
         }
+    }
+
+    public void MoveUp()
+    {
+        floor++;
+        GenerateDungeon();
+    }
+
+    public void MoveDown()
+    {
+        floor--;
+        GenerateDungeon();
     }
 }

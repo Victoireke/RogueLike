@@ -22,5 +22,10 @@ namespace Items
         {
             Items.Remove(item);
         }
+
+        public bool RemoveItem(Consumable item)
+        {
+            return Items.Remove(item);
+        }
     }
 }

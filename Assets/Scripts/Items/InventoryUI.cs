@@ -9,6 +9,7 @@ public class InventoryUI : MonoBehaviour
     private VisualElement root; // Root element
     private int selected; // Selected index
     private int numItems; // Number of items
+    private List<Consumable> items; // List of items
 
     public int Selected
     {
@@ -71,6 +72,7 @@ public class InventoryUI : MonoBehaviour
     {
         selected = 0;
         numItems = list.Count;
+        items = list;
         Clear();
 
         for (int i = 0; i < numItems && i < labels.Length; i++)
@@ -85,5 +87,15 @@ public class InventoryUI : MonoBehaviour
     public void Hide()
     {
         root.style.display = DisplayStyle.None;
+    }
+
+    public Consumable GetSelectedItem()
+    {
+        if (items == null || items.Count == 0)
+        {
+            return null;
+        }
+
+        return items[selected];
     }
 }

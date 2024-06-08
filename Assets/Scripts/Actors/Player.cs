@@ -228,7 +228,7 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
                 List<Actor> nearbyEnemies = GameManager.Get.GetNearbyEnemies(transform.position);
                 foreach (var enemy in nearbyEnemies)
                 {
-                    enemy.DoDamage(item.Value);
+                    enemy.DoDamage(item.Value, actor); // Pass the player actor as the attacker
                 }
                 UIManager.Instance.ShowMessage("You used a Fireball and damaged nearby enemies.", Color.red);
                 break;
