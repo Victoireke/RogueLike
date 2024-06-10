@@ -47,16 +47,16 @@ public class Enemy : MonoBehaviour
                 IsFighting = true;
             }
 
-            // Bereken de afstand tussen de enemy en het target
+            // Calculate distance between the enemy and the target
             float distance = Vector3.Distance(transform.position, Target.transform.position);
             if (distance < 1.5f)
             {
-                // Als de afstand kleiner is dan 1.5, voer dan de Hit-functie uit
+                // If the distance is less than 1.5, execute the Hit function
                 Action.Hit(GetComponent<Actor>(), Target);
             }
             else
             {
-                // In het andere geval, voer de MoveAlongPath-functie uit
+                // Otherwise, execute the MoveAlongPath function
                 MoveAlongPath(targetGridPosition);
             }
         }

@@ -1,4 +1,4 @@
-using Items;
+using Items; // Ensure this is included
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
 
     // Lijst voor Consumable items
     private List<Consumable> items = new List<Consumable>();
+
+    // Lijst voor TombStones
+    private List<TombStone> tombStones = new List<TombStone>(); // Add this line
 
     private void Awake()
     {
@@ -44,7 +47,7 @@ public class GameManager : MonoBehaviour
     // Verwijder een Consumable item uit de lijst
     public void RemoveItem(Consumable item)
     {
-        items.Remove(item);
+        items.Remove(item); // Change `remove` to `Remove`
     }
 
     // Haal een Consumable item op basis van locatie
@@ -150,5 +153,43 @@ public class GameManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    // Add a TombStone to the GameManager
+    public void AddTombStone(TombStone stone)
+    {
+        tombStones.Add(stone);
+    }
+
+    // Clear all entities and items on the current floor
+    public void ClearFloor()
+    {
+        // Clear enemies
+        foreach (var enemy in Enemies)
+        {
+            Destroy(enemy.gameObject);
+        }
+        Enemies.Clear();
+
+        // Clear items
+        foreach (var item in items)
+        {
+            Destroy(item.gameObject);
+        }
+        items.Clear();
+
+        // Clear ladders
+        foreach (var ladder in Ladders)
+        {
+            Destroy(ladder.gameObject);
+        }
+        Ladders.Clear();
+
+        // Clear tombstones
+        foreach (var tombStone in tombStones)
+        {
+            Destroy(tombStone.gameObject);
+        }
+        tombStones.Clear();
     }
 }

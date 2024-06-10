@@ -152,12 +152,14 @@ public class MapManager : MonoBehaviour
 
     public void MoveUp()
     {
+        GameManager.Get.ClearFloor();
         floor++;
         GenerateDungeon();
     }
 
     public void MoveDown()
     {
+        GameManager.Get.ClearFloor();
         floor--;
         GenerateDungeon();
     }

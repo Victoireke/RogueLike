@@ -11,6 +11,19 @@ public class DungeonGenerator : MonoBehaviour
     private int currentFloor = 0;
     List<Room> rooms = new List<Room>();
 
+    // List of enemy prefab names sorted by strength
+    private List<string> enemyNames = new List<string>
+    {
+        "Enemy1",
+        "Enemy2",
+        "Enemy3",
+        "Enemy4",
+        "Enemy5",
+        "Enemy6",
+        "Enemy7",
+        "Enemy8"
+    };
+
     public void SetSize(int width, int height)
     {
         this.width = width;
@@ -102,7 +115,6 @@ public class DungeonGenerator : MonoBehaviour
         {
             playerObject = GameManager.Get.Player.gameObject;
             playerObject.transform.position = new Vector3(rooms[0].Center().x, rooms[0].Center().y, 0);
-
         }
         else
         {
@@ -162,11 +174,9 @@ public class DungeonGenerator : MonoBehaviour
 
     private void TunnelBetween(Room oldRoom, Room newRoom)
     {
-        // Get centers of old and new rooms
         Vector2Int oldRoomCenter = oldRoom.Center();
         Vector2Int newRoomCenter = newRoom.Center();
 
-        // Determine the position of the corner for the tunnel
         Vector2Int tunnelCorner;
         if (Random.value < 0.5f)
         {
@@ -177,20 +187,15 @@ public class DungeonGenerator : MonoBehaviour
             tunnelCorner = new Vector2Int(oldRoomCenter.x, newRoomCenter.y);
         }
 
-        // Create a list to store tunnel coordinates
         List<Vector2Int> tunnelCoords = new List<Vector2Int>();
 
-        // Compute the tunnel coordinates between old and new room centers
         BresenhamLine.Compute(oldRoomCenter, tunnelCorner, tunnelCoords);
         BresenhamLine.Compute(tunnelCorner, newRoomCenter, tunnelCoords);
 
-        // Loop through the tunnel coordinates
         for (int i = 0; i < tunnelCoords.Count; i++)
         {
-            // Set floor tiles for each coordinate
             SetFloorTile(new Vector3Int(tunnelCoords[i].x, tunnelCoords[i].y, 0));
 
-            // Set wall tiles around the floor tiles to create the tunnel
             for (int x = tunnelCoords[i].x - 1; x <= tunnelCoords[i].x + 1; x++)
             {
                 for (int y = tunnelCoords[i].y - 1; y <= tunnelCoords[i].y + 1; y++)
@@ -204,9 +209,6 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-
-
-
     private void PlaceEnemies(Room room, int maxEnemies)
     {
         int num = Random.Range(0, maxEnemies + 1);
@@ -216,14 +218,15 @@ public class DungeonGenerator : MonoBehaviour
             int x = Random.Range(room.X + 1, room.X + room.Width - 1);
             int y = Random.Range(room.Y + 1, room.Y + room.Height - 1);
 
-            if (Random.value < 0.5f)
+            int enemyIndex = Mathf.Clamp(currentFloor, 0, enemyNames.Count - 1);
+            string enemyName = enemyNames[enemyIndex];
+
+            if (Random.value > 0.5f && enemyIndex < enemyNames.Count - 1)
             {
-                GameManager.Get.CreateActor("Enemy", new Vector2(x, y));
+                enemyName = enemyNames[enemyIndex + 1];
             }
-            else
-            {
-                GameManager.Get.CreateActor("Enemy1", new Vector2(x, y));
-            }
+
+            GameManager.Get.CreateActor(enemyName, new Vector2(x, y));
         }
     }
 
