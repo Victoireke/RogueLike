@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     // Lijst voor TombStones
     private List<TombStone> tombStones = new List<TombStone>(); // Add this line
 
+
     private void Awake()
     {
         if (instance == null)
@@ -69,6 +70,7 @@ public class GameManager : MonoBehaviour
     public void AddEnemy(Actor enemy)
     {
         Enemies.Add(enemy);
+        uiManager.UpdateEnemiesLeft(Enemies.Count); // Update enemies left in UI
     }
 
     public Actor GetActorAtLocation(Vector3 location)
@@ -116,6 +118,7 @@ public class GameManager : MonoBehaviour
     {
         Enemies.Remove(enemy);
         Destroy(enemy.gameObject); // Optionally, depending on your implementation
+        uiManager.UpdateEnemiesLeft(Enemies.Count); // Update enemies left in UI
     }
 
     public UIManager GetUIManager()
@@ -170,6 +173,7 @@ public class GameManager : MonoBehaviour
             Destroy(enemy.gameObject);
         }
         Enemies.Clear();
+        uiManager.UpdateEnemiesLeft(Enemies.Count); // Update enemies left in UI
 
         // Clear items
         foreach (var item in items)

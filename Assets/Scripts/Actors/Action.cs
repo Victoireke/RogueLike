@@ -37,7 +37,7 @@ public class Action : MonoBehaviour
         // Als de schade positief is, verminder dan de hitpoints van het doelwit
         if (damage > 0)
         {
-            target.DoDamage(damage);
+            target.DoDamage(damage, actor);
         }
 
         // Bericht samenstellen

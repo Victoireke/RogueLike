@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
     public InventoryUI InventoryUI { get; private set; } // Reference to the InventoryUI
     private HealthBar healthBar;
 
+    [SerializeField] private FloorInfo floorInfo;
+
     private void Awake()
     {
         if (instance == null)
@@ -34,6 +36,11 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogError("InventoryUI component not found.");
         }
+
+        if (floorInfo == null)
+        {
+            Debug.LogError("FloorInfo component not found.");
+        }
     }
 
     public void UpdateHealth(int currentHP, int maxHP)
@@ -57,6 +64,22 @@ public class UIManager : MonoBehaviour
         if (healthBar != null)
         {
             healthBar.SetXP(xp);
+        }
+    }
+
+    public void UpdateFloor(int floor)
+    {
+        if (floorInfo != null)
+        {
+            floorInfo.SetFloor(floor);
+        }
+    }
+
+    public void UpdateEnemiesLeft(int enemiesLeft)
+    {
+        if (floorInfo != null)
+        {
+            floorInfo.SetEnemiesLeft(enemiesLeft);
         }
     }
 
